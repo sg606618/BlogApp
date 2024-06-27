@@ -1,0 +1,43 @@
+{% load static %}
+{% block hero-section %}
+    <section
+            class="header relative pt-16 items-center flex h-screen max-h-860-px"
+    >
+        <div class="container mx-auto items-center flex flex-wrap">
+            <div class="w-full md:w-8/12 lg:w-6/12 xl:w-6/12 px-4">
+                <div class="pt-32 sm:pt-0">
+                    <h2 class="font-semibold text-4xl text-blueGray-600">
+                        Bloggers are always welcome - Use your creativity and explore your creation.
+                    </h2>
+                    <p class="mt-4 text-lg leading-relaxed text-blueGray-500">
+                        The only trusted and your creativity exploration field. Just wake up and grap your pen and paper
+                        and write what you want. Paste your skill and knowledge and show to this
+                        world.
+                    </p>
+                    <div class="mt-12">
+                        <a
+                                href="https://www.creative-tim.com/learning-lab/tailwind/js/overview/notus?ref=njs-index"
+                                target="_blank"
+                                class="get-started text-white font-bold px-6 py-4 rounded outline-none focus:outline-none mr-1 mb-1 bg-pink-500 active:bg-pink-600 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"
+                        >
+                            Start your Journey
+                        </a>
+                        <a
+                                href="#"
+                                class="ml-1 text-white font-bold px-6 py-4 rounded outline-none focus:outline-none mr-1 mb-1 bg-blueGray-600 active:bg-blueGray-600 uppercase text-sm shadow hover:shadow-lg ease-linear transition-all duration-150"
+                                target="_blank"
+                        >
+                            Subscribe
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <img
+                class="absolute top-0 b-auto right-0 pt-16 sm:w-6/12 -mt-48 sm:mt-0 w-10/12 max-h-860-px"
+                src="{% static '/assets/img/ill_header_3.png' %}"
+                alt="..."
+        />
+    </section>
+{% endblock %}
