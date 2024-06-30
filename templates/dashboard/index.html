@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block header %}
-    {% include 'header/navbar.html' %}
+    {% include 'components/navbar.html' %}
 {% endblock %}
 
 {% block hero-section %}
@@ -14,5 +14,14 @@
 {% endblock %}
 
 {% block content %}
-    this is the dashboard and dashboard is just wow
+    {% include 'components/about.html' %}
+    {% include 'components/blogs.html' %}
+{% endblock %}
+
+{% block contact %}
+    {% include 'components/contact.html' %}
+{% endblock %}
+
+{% block footer %}
+    {% include 'components/footer.html' %}
 {% endblock %}

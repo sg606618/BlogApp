@@ -35,10 +35,13 @@ INSTALLED_APPS = [
     'tailwind',
     'theme',
     'django_browser_reload',
+
 ]
 
 EXTERNAL_APPS = [
     'category',
+
+    'customadmin',
 ]
 
 INSTALLED_APPS += EXTERNAL_APPS
