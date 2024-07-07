@@ -1,45 +1,11 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DetailView
 
 from category.forms import BlogForm
 from category.models import Blog, Category
-
-
-# class CategoryList(ListView):
-#     model = Category
-#     # paginate_by = 10
-#     http_method_names = ['get', ]
-#     template_name = 'dashboard/index.html'
-#     context_object_name = 'category'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         return context
-
-
-# class CategoryCreate(CreateView, SuccessMessageMixin):
-#     model = Category
-#     template_name = 'category/create.html'
-#     # form_class = CategoryForm
-#     success_url = reverse_lazy('category:list')
-#     extra_context = {'job': 'Create'}
-#
-#
-# class CategoryUpdate(UpdateView, SuccessMessageMixin):
-#     model = Category
-#     template_name = 'category/update.html'
-#     # form_class = CategoryForm
-#     success_url = reverse_lazy('category:list')
-#     extra_context = {'job': 'Update'}
-#     success_message = 'Category updated successfully'
-#     context_object_name = 'category'
-#
-#
-# class CategoryDelete(DeleteView):
-#     model = Category
-#     success_url = reverse_lazy('category:list')
 
 
 class BlogList(ListView):
@@ -71,7 +37,7 @@ class BlogList(ListView):
             return ['dashboard/index.html']
 
 
-class BlogCreate(CreateView, SuccessMessageMixin):
+class BlogCreate(LoginRequiredMixin, CreateView, SuccessMessageMixin):
     model = Blog
     template_name = 'category/add.html'
     form_class = BlogForm
@@ -84,12 +50,18 @@ class BlogCreate(CreateView, SuccessMessageMixin):
         context['job'] = 'Create'
         return context
 
-    # def get_queryset(self):
-    #     category = Category.objects.all()
-    #     return {'category': category}
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('category:blog')
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['files'] = self.request.FILES
+        return kwargs
 
 
-class BlogUpdate(UpdateView, SuccessMessageMixin):
+class BlogUpdate(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
     model = Blog
     template_name = 'category/update.html'
     form_class = BlogForm
@@ -97,3 +69,12 @@ class BlogUpdate(UpdateView, SuccessMessageMixin):
     extra_context = {'job': 'Update'}
     success_message = 'Category updated successfully'
     context_object_name = 'blog'
+
+
+class BlogView(DetailView):
+    model = Blog
+    template_name = 'category/blog_description.html'
+    context_object_name = 'blog'
+    slug_url_kwarg = 'slug'
+
+

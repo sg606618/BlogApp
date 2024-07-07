@@ -2,6 +2,8 @@ import uuid
 from django.db import models
 from django.utils.text import slugify
 
+from account.models import Account
+
 
 class Category(models.Model):
     category_name = models.CharField(max_length=100)
@@ -30,8 +32,12 @@ class Blog(models.Model):
     heading = models.CharField(max_length=100)
     category = models.ForeignKey(Category, on_delete=models.RESTRICT)
     content = models.TextField()
+
     slug = models.SlugField(unique=True, blank=True, null=True)
     image = models.ImageField(upload_to='blog_images/', null=True, blank=True)
+
+    added_by = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, blank=True)
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

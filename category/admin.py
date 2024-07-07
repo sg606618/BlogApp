@@ -7,13 +7,12 @@ from category.models import Category, Blog
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('category_name', 'slug')
-    search_fields = ('category_name', )
-    list_display_links = ('category_name', )
+    search_fields = ('category_name',)
+    list_display_links = ('category_name',)
 
 
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
-    list_display = ('title', 'slug', 'category', 'content', 'heading', 'created_at', 'updated_at')
-    search_fields = ('title', )
-    list_display_links = ('title', )
-
+    list_display = ('title', 'slug', 'category', 'content', 'heading', 'added_by', 'created_at', 'updated_at')
+    search_fields = ('title',)
+    list_display_links = ('title',)

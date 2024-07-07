@@ -41,31 +41,26 @@ def user(req):
 
 
 def admin_login(req):
-    try:
-        if req.user.is_authenticated:
-            return redirect('customadmin:index')
+    if req.method == 'POST':
+        username = req.POST.get('username')
+        password = req.POST.get('password')
 
-        if req.method == 'POST':
-            username = req.POST['username']
-            password = req.POST['password']
-
-            user_obj = User.objects.filter(username=username)
-            if not user_obj.exists():
-                messages.info(req, "Account not found!!!")
-                return HttpResponseRedirect(req.META.get('HTTP_REFERER', '/'))
-
-            user_obj = authenticate(username=username, password=password)
-
-            if user_obj and user_obj.is_superuser:
-                login(req, user_obj)
-                return redirect('customadmin:index')
-
-            messages.info(req, "Invalid username or password")
+        try:
+            user_obj = User.objects.get(username=username)
+        except User.DoesNotExist:
+            messages.error(req, "Account not found!!!")
             return redirect('customadmin:login')
-        return render(req, 'customadmin/login.html')
-    except Exception as e:
-        print(e)
-        return render(req, 'customadmin/login.html')
+
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            login(req, user)
+            return redirect('customadmin:index')
+        else:
+            messages.error(req, "Invalid username or password")
+            return redirect('customadmin:login')
+
+    return render(req, 'customadmin/login.html')
 
 
 def admin_logout(req):
