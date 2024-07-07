@@ -8,7 +8,17 @@
 {% block contents %}
     <section class="text-gray-600 body-font">
         <div class="container px-5 py-24 mx-auto">
+            {% if messages %}
+                <ul class="messages text-red-500">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
             <h1 class="uppercase ml-3 text-3xl font-bold mb-5 text-black">Categories</h1>
+            <div class="absolute text-sm rounded right-10 top-10 bg-gray-500 w-fit h-fit px-3 py-1">
+                <a href="{% url 'customadmin:add' %}" class="text-center text-white">Add Categories</a>
+            </div>
             <section class="text-gray-600 body-font">
                 <div class="container px-5 py-3 mx-auto">
                     <div class="flex flex-wrap -m-4 gap-6">
@@ -36,11 +46,12 @@
                                 {% for category in category %}
                                     <tr>
                                         <td class="px-4 py-3">{{ forloop.counter }}</td>
-                                        <td class="px-4 py-3">{{ category.category_name }}</td>
+                                        <td class="px-4 py-3 capitalize">{{ category.category_name|capfirst }}</td>
                                         <td class="px-4 py-3">{{ category.slug }}</td>
                                         <td class="px-4 py-3">
-                                            <a href="{% url 'customadmin:delete' category.slug %}" class="text-sm py-1 px-3 bg-red-500 text-white shadow-lg font-semibold w-fit rounded-md outline-none"
-                                                    type="submit">
+                                            <a href="{% url 'customadmin:delete' category.slug %}"
+                                               class="text-sm py-1 px-3 bg-red-500 text-white shadow-lg font-semibold w-fit rounded-md outline-none"
+                                               type="submit">
                                                 Delete
                                             </a>
                                         </td>

@@ -1,38 +1,50 @@
-# From Django Contrib Packages
-from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import authenticate, login, logout
-
-# View Functions and Classes
-from django.views import View
-from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate, logout as auth_logout
+from .forms import SignUpForm, SignInForm
 
 
-class LoginView(View):
-    def get(self, request):
-        return render(request, 'account/login.html')
+def redirect_if_authenticated(view_func):
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('dashboard')
+        return view_func(request, *args, **kwargs)
 
-    def post(self, request):
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        user = authenticate(email=email, password=password)
-        if user:
-            if user.is_active:
-                login(request, user=user)
-                messages.success(request, "Successfully Logged In.")
-                return redirect('category:list')
-            else:
-                messages.error("Inactive user cannot login")
-                return redirect('account:login')
-        else:
-            messages.error(request, "User name and password did not match")
+    return wrapper
+
+
+@redirect_if_authenticated
+def signup(req):
+    if req.method == 'POST':
+        form = SignUpForm(req.POST)
+        if form.is_valid():
+            user = form.save()
+            login(req, user)
             return redirect('account:login')
+    else:
+        form = SignUpForm()
+    return render(req, 'account/register.html', {'form': form})
 
 
-class LogoutView(LoginRequiredMixin, View):
-    login_url = reverse_lazy('account:login')
+@redirect_if_authenticated
+def signin(req):
+    if req.method == 'POST':
+        form = SignInForm(req, req.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(req, username=username, password=password)
+            if user is not None:
+                login(req, user)
+                return redirect('dashboard')
+    else:
+        form = SignInForm()
+    return render(req, 'account/login.html', {'form': form})
 
-    def get(self, request):
-        logout(request)
+
+@login_required
+def logout(req):
+    if req.method == 'POST':
+        auth_logout(req)
         return redirect('account:login')
+    return redirect('dashboard')

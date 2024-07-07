@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from django.utils.text import slugify
 
+
 class Category(models.Model):
     category_name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, blank=True, null=True)

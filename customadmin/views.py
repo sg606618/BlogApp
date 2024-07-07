@@ -1,20 +1,25 @@
 from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
+from django.db.models import ProtectedError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.generic import CreateView
 
+from account.models import Account
 from category.models import Blog, Category
-from customadmin.forms import CategoryForm
+from .forms import CategoryForm
 
 
 @login_required(login_url='customadmin:login')
 def index(req):
-    category = Category.objects.all()
+    cat = Category.objects.all()
     blogs = Blog.objects.all()
-    blog_count = blogs.count()
-    return render(req, 'customadmin/dashboard.html', {'blog_count': blog_count, 'category_count': category.count()})
+    account = Account.objects.all()
+    return render(req, 'customadmin/dashboard.html',
+                  {'blog_count': blogs.count(), 'category_count': cat.count(), 'account_count': account.count()})
 
 
 @login_required(login_url='customadmin:login')
@@ -31,7 +36,8 @@ def category(req):
 
 @login_required(login_url='customadmin:login')
 def user(req):
-    return render(req, 'customadmin/users.html')
+    account = Account.objects.all()
+    return render(req, 'customadmin/users.html', {'account': account})
 
 
 def admin_login(req):
@@ -68,9 +74,12 @@ def admin_logout(req):
 
 
 def category_delete(req, slug):
-    cat = get_object_or_404(Category, slug=slug)
-    cat.delete()
-    messages.success(req, 'Category deleted successfully.')
+    try:
+        cat = get_object_or_404(Category, slug=slug)
+        cat.delete()
+        messages.success(req, 'Category deleted successfully.')
+    except Exception as e:
+        messages.error(req, 'Cannot delete the category because it is referenced by some blogs.', e)
     return redirect('customadmin:category')
 
 
@@ -95,3 +104,14 @@ def category_update(req, slug):
     except Category.DoesNotExist:
         messages.error(req, 'Category does not exist.')
         return redirect('customadmin:category')
+
+
+def add_category(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            cat = form.save()
+            return redirect('customadmin:category')
+    else:
+        form = CategoryForm()
+    return render(request, 'customadmin/add_category.html', {'form': form})

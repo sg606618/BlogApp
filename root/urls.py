@@ -9,11 +9,13 @@ from category.views import BlogList
 urlpatterns = [
     path('dj-admin/', admin.site.urls),
     path('admin/', include('customadmin.urls')),
+
     path('__reload__/', include("django_browser_reload.urls")),
-    # path('category/', include("category.urls")),
-    path('category/', include("category.urls", namespace='category')),
-    # path('', TemplateView.as_view(template_name='dashboard/index.html'), name='dashboard'),
+
+    path('blogs/', include("category.urls", namespace='category')),
     path('', BlogList.as_view(), name='dashboard'),
+
+    path('account/', include('account.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

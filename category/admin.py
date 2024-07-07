@@ -13,7 +13,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
-    list_display = ('title', 'slug', 'category', 'content', 'heading')
+    list_display = ('title', 'slug', 'category', 'content', 'heading', 'created_at', 'updated_at')
     search_fields = ('title', )
     list_display_links = ('title', )
 

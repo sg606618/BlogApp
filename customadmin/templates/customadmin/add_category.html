@@ -1,0 +1,20 @@
+{% extends 'category/base.html' %}
+{% load static %}
+{% block title %}Add Category{% endblock %}
+
+{% block content %}
+    <div class="container mx-auto max-w-[25rem] py-8 shadow-2xl px-6 rounded my-10 text-black">
+        <h1 class="text-center font-bold uppercase text-3xl text-black">Adding Category</h1>
+        <form method="post" action="{% url 'customadmin:add' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="flex flex-col">
+                <label class="text-black" for="id_category_name">Category Name: </label>
+                {{ form.category_name }}
+                {{ form.category_name.errors }}
+            </div>
+            <button type="submit" class="rounded bg-gray-300 px-3 font-semibold text-black my-3">Add Category</button>
+        </form>
+
+    </div>
+{% endblock %}
