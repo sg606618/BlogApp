@@ -1,0 +1,44 @@
+{% extends 'category/base.html' %}
+{% load static %}
+{% block title %}Add Blog{% endblock %}
+
+{% block create_blog %}
+    <div class="container mx-auto max-w-[25rem] py-8 shadow-2xl px-6 rounded my-10 text-black">
+        <h1 class="text-center font-bold uppercase text-3xl text-black">Adding Blogs</h1>
+        <form method="post" action="{% url 'category:add' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="container flex flex-col gap-5">
+                <div class="flex flex-col">
+                    <label class="text-black" for="id_title">Title: </label>
+                    {{ form.title }}
+                    {{ form.title.errors }}
+                </div>
+                <div class="flex flex-col">
+                    <label class="text-black" for="id_heading">Heading: </label>
+                    {{ form.heading }}
+                    {{ form.heading.errors }}
+                </div>
+                <div class="flex flex-col">
+                    <label class="text-black" for="id_category">Category: </label>
+                    <select name="category" id="id_category" class="rounded text-black">
+                        {% for category in category %}
+                            <option value="{{ category.id }}">{{ category.category_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label class="text-black" for="id_content">Content: </label>
+                    {{ form.content }}
+                    {{ form.content.errors }}
+                </div>
+                <div class="flex flex-col">
+                    <label class="text-black" for="id_image">Image: </label>
+                    {{ form.image }}
+                    {{ form.image.errors }}
+                </div>
+            </div>
+            <button type="submit" class="rounded bg-gray-300 px-3 font-semibold text-black my-3">Add</button>
+        </form>
+    </div>
+{% endblock %}

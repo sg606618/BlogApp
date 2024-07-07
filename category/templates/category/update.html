@@ -1,0 +1,10 @@
+{% extends 'category/base.html' %}
+{% load static %}
+
+
+<div class="container mx-auto">
+    <form method="post" action="{% url 'category:update' blog.id %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+    </form>
+</div>

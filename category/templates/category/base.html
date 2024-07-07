@@ -24,6 +24,10 @@
 
     {% block news-content %}{% endblock %}
 
+    {% block create_blog %}{% endblock %}
+
+    {% block auth-content %}{% endblock %}
+
 </main>
 
 </body>
@@ -57,4 +61,28 @@
         document.getElementById(dropdownID).classList.toggle("block");
     }
 </script>
+
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addSectionButton = document.getElementById('add-section');
+            const sectionsContainer = document.getElementById('sections');
+            const sectionFormTemplate = sectionsContainer.querySelector('.section-form').cloneNode(true);
+
+            addSectionButton.addEventListener('click', function() {
+                const newSectionForm = sectionFormTemplate.cloneNode(true);
+                const formCount = sectionsContainer.querySelectorAll('.section-form').length;
+
+                newSectionForm.setAttribute('data-index', formCount);
+                newSectionForm.querySelectorAll('input, textarea, select').forEach(input => {
+                    const name = input.getAttribute('name').replace(/\d+/, formCount);
+                    const id = input.getAttribute('id').replace(/\d+/, formCount);
+                    input.setAttribute('name', name);
+                    input.setAttribute('id', id);
+                    input.value = '';
+                });
+
+                sectionsContainer.appendChild(newSectionForm);
+            });
+        });
+    </script>
 </html>

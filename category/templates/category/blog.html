@@ -6,20 +6,24 @@
 {% block blog-content %}
     <section class="relative py-10">
         <div class="container mx-auto px-4">
-            <h1 class="text-center text-4xl font-bold text-slate-200 uppercase">Blogs</h1>
+            <h1 class="text-center text-4xl font-bold uppercase">Blogs</h1>
+            <div class="absolute text-sm rounded right-10 top-10 bg-gray-500 w-fit h-fit px-3 py-1">
+                <a href="{% url 'category:add' %}" class="text-center text-white">Add Blogs</a>
+            </div>
             <section class="text-gray-600 body-font">
                 <div class="container px-5 py-24 mx-auto">
                     <div class="flex flex-wrap -m-4">
-                        <div class="md:w-5/12 lg:w-3/12 p-4">
-                            <div class="bg-gray-100 p-6 rounded-lg">
-                                <img class="h-40 rounded w-full object-cover object-center mb-6" src="https://i.pinimg.com/564x/b9/6e/cb/b96ecb6dfd4faf8bca69ad611a0702b6.jpg" alt="content">
-                                <h3 class="tracking-widest text-indigo-500 text-xs font-medium title-font">SUBTITLE</h3>
-                                <h2 class="text-lg text-gray-900 font-medium title-font mb-4">Chichen Itza</h2>
-                                <p class="leading-relaxed text-base">Fingerstache flexitarian street art 8-bit
-                                    waistcoat.
-                                    Distillery hexagon disrupt edison bulbche.</p>
+                        {% for blog in blogs %}
+                            <div class="md:w-5/12 lg:w-3/12 p-4">
+                                <div class="bg-gray-100 p-6 rounded-lg">
+                                    <img class="h-40 rounded w-full object-cover object-center mb-6"
+                                         src="{{ blog.image.url }}" alt="content">
+                                    <h3 class="tracking-widest text-indigo-500 text-xs font-medium title-font">{{ blog.category.category_name }}</h3>
+                                    <h2 class="text-lg text-gray-900 font-medium title-font mb-4">{{ blog.title }}</h2>
+                                    <p class="leading-relaxed text-base line-clamp-3">{{ blog.content }}</p>
+                                </div>
                             </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </section>
