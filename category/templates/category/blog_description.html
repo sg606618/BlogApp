@@ -7,20 +7,24 @@
 
 {% block blog_description %}
     <section class="max-w-[40rem] mx-auto container my-10">
-    <h1 class="text-4xl font-bold my-3 text-center">{{ blog.title|capfirst }}</h1>
+        <h1 class="text-4xl font-bold my-3 text-center">{{ blog.title|capfirst }}</h1>
         <div class="text-xs text-gray-900 font-bold flex flex-col justify-end items-end">
             <span>{{ blog.created_at }}</span>
-            <span>by: {{ blog.added_by|capfirst }}</span>
+
+            {% with full_name=blog.added_by.first_name|stringformat:"s "|add:blog.added_by.last_name %}
+
+            <span>by: {{ full_name|capfirst }}</span>
+            {% endwith %}
         </div>
-    <div class="container overflow-hidden flex w-full max-h-[22rem]">
-        <img src="{{ blog.image.url }}" alt="" class="overflow-hidden w-full h-full object-cover">
-    </div>
+        <div class="container overflow-hidden flex w-full max-h-[22rem]">
+            <img src="{{ blog.image.url }}" alt="" class="overflow-hidden w-full h-full object-cover">
+        </div>
         <div class="text-sm text-gray-900 font-bold flex flex-col justify-end items-end">
             <span>Under: {{ blog.category|capfirst }}</span>
         </div>
 
-    <h3 class="text-2xl font-semibold my-2">{{ blog.heading|capfirst }}</h3>
+        <h3 class="text-2xl font-semibold my-2">{{ blog.heading|capfirst }}</h3>
 
-    <p>{{ blog.content }}</p>
+        <p>{{ blog.content }}</p>
     </section>
 {% endblock %}

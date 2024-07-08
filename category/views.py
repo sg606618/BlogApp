@@ -6,6 +6,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DetailView
 
 from category.forms import BlogForm
 from category.models import Blog, Category
+from account.models import Account
 
 
 class BlogList(ListView):
@@ -44,6 +45,12 @@ class BlogCreate(LoginRequiredMixin, CreateView, SuccessMessageMixin):
     success_url = reverse_lazy('category:blog')
     success_message = "Blog was created successfully."
 
+    def form_valid(self, form):
+        blog = form.save(commit=False)
+        blog.added_by = Account.objects.get(id=self.request.user.id)
+        blog.save()
+        return redirect(self.success_url)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['category'] = Category.objects.all()
@@ -59,7 +66,6 @@ class BlogCreate(LoginRequiredMixin, CreateView, SuccessMessageMixin):
         kwargs = super().get_form_kwargs()
         kwargs['files'] = self.request.FILES
         return kwargs
-
 
 class BlogUpdate(LoginRequiredMixin, UpdateView, SuccessMessageMixin):
     model = Blog

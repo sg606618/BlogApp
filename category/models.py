@@ -36,7 +36,7 @@ class Blog(models.Model):
     slug = models.SlugField(unique=True, blank=True, null=True)
     image = models.ImageField(upload_to='blog_images/', null=True, blank=True)
 
-    added_by = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, blank=True)
+    added_by = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, blank=True, related_name='user')
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
